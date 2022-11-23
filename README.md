@@ -19,3 +19,11 @@ naselin microservices repository
    2. подготовлены плейбуки Ansible с использованием динамического инвентори для установки докера и запуска там образа приложения;
    3. подготовлен шаблон Packer, который делает образ с уже установленным Docker;
    4. с помошью шаблона собран образ с установленным Docker.
+
+Запуск проекта (от корня репозитория, после настройки переменных):
+1. поднять инстансы `$ cd docker-monolith/infra/terraform/ && terraform apply`
+2. развернуть приложение `cd docker-monolith/infra/ansible/ && ansible-playbook playbooks/site_docker.yml`
+3. (опционально) собрать образ Packer  `cd docker-monolith/infra/ && packer build -var-file=packer/variables.json packer/docker_host.json`
+
+Проверка работоспособности:
+перейти по ссылке `http://{{ external_ip_address_app }}` для каждого из созданных инстансов.
