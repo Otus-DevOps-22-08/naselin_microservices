@@ -1,0 +1,8 @@
+{
+    "service_account_key_file": "packer/key.json.example",
+    "folder_id": "your_folder_id",
+    "source_image_family": "ubuntu-1804-lts",
+    "instance_cores": "2",
+    "instance_mem_gb": "2",
+    "subnet_id": "your_subnet_id"
+}

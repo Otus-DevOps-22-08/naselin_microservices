@@ -1,0 +1,15 @@
+REPOSITORY                       TAG              IMAGE ID       CREATED         SIZE
+naselin/ubuntu-tmp-file          latest           578111ffd8da   2 minutes ago   63.1MB
+ubuntu                           18.04            71eaf13299f4   3 weeks ago     63.1MB
+mcr.microsoft.com/mssql/server   2019-latest      e3afdc6d8e5c   3 months ago    1.47GB
+prod-app_frontend                latest           1b4fb5cce43b   12 months ago   421MB
+prod-app_app                     latest           2b4c15671e97   13 months ago   957MB
+trips_app                        latest           a1539f6a498e   13 months ago   956MB
+postgres                         12               fe603fe275ba   13 months ago   371MB
+hello-world                      latest           feb5d9fea6a5   14 months ago   13.3kB
+node                             15.12.0-alpine   e51e3f3d8dcf   20 months ago   112MB
+python                           3.9.1            2a93c239d591   21 months ago   885MB
+
+
+Образ - по сути, шаблон, на основе которого можно создать контейнер (RO-слои). Контейнер - среда выполнения, созданная на базе образа (имеет RW-слой).
+В выводе команд видно, что у контейнера, в отличие от образа, есть state, сетевые настройки, отличия в секции Сonfig (например, присвоен hostname).

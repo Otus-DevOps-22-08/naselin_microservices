@@ -1,0 +1,35 @@
+---
+- name: Install docker
+  hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+    - name: Install required packages
+      ansible.builtin.apt:
+        pkg:
+          - python3-pip
+        state: present
+        update_cache: true
+
+    - name: Add Docker GPG apt key
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      ansible.builtin.apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+
+    - name: Install Docker
+      ansible.builtin.apt:
+        pkg:
+          - docker-ce
+        state: present
+        update_cache: true
+
+    - name: Install Docker Python module for all users
+      ansible.builtin.pip:
+        name: docker
+        umask: "0022"
