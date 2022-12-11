@@ -5,10 +5,16 @@ RUN mkdir $APP_HOME
 
 WORKDIR $APP_HOME
 COPY Gemfile* $APP_HOME/
-RUN apk --no-cache --update add ruby-full ruby-dev build-base \
+RUN apk --no-cache --update add \
+        build-base \
+        ruby-dev \
+        ruby-full \
     && gem install bundler:1.17.2 --no-document \
     && bundle install \
-    && apk del build-base ruby-dev
+    && apk del \
+        build-base \
+        ruby-dev
+
 COPY . $APP_HOME
 
 ENV POST_SERVICE_HOST post
