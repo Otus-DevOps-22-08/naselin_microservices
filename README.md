@@ -3,12 +3,12 @@ naselin microservices repository
 ---
 <!-- MarkdownTOC autolink=true -->
 
-- [HW-12 (lessons-16:17). Технология контейнеризации. Введение в Docker.](#HW12)
-- [HW-13 (lesson-18). Docker-образы. Микросервисы.](#HW13)
+- [HW-12 (lessons-16:17). Технология контейнеризации. Введение в Docker.](#hw12)
+- [HW-13 (lesson-18). Docker-образы. Микросервисы.](#hw13)
 
 <!-- /MarkdownTOC -->
 ---
-## HW-12 (lessons-16:17). <a name="HW12"></a>
+## HW-12 (lessons-16:17). <a name="hw12"> </a>
 #### Технология контейнеризации. Введение в Docker.
 1. Установлен Docker, запущены контейнеры.
 2. Создан image из запущенного контейнера.
@@ -27,9 +27,11 @@ naselin microservices repository
 3. (опционально) собрать образ Packer  `cd docker-monolith/infra/ && packer build -var-file=packer/variables.json packer/docker_host.json`
 
 Проверка работоспособности:
+
 перейти по ссылке `http://{{ external_ip_address_app }}` для каждого из созданных инстансов.
+
 ---
-## HW-13 (lesson-8). <a name="HW13"></a>
+## HW-13 (lesson-8). <a name="hw13"> </a>
 #### Docker-образы. Микросервисы.
 0. Установлен hadolint, в дальнейшем использован для проверки и исправления Dockerfile'ов.
 1. Загружен и распакован архив с новой структурой приложения.
