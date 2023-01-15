@@ -5,6 +5,8 @@ COPY . /app
 
 RUN apk --no-cache --update add \
         build-base \
+        gcc \
+        musl-dev \
         python3 \
         python3-dev \
     && python3 -m ensurepip \

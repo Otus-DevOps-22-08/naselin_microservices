@@ -13,9 +13,10 @@ def http_healthcheck_handler(mongo_host, mongo_port, version):
                          serverSelectionTimeoutMS=2000)
     try:
         postdb.admin.command('ismaster')
-        postdb_status = 1
     except ConnectionFailure:
         postdb_status = 0
+    else:
+        postdb_status = 1
 
     status = postdb_status
     healthcheck = {
