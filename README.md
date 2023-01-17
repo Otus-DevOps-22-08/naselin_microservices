@@ -7,6 +7,7 @@ naselin microservices repository
 - [HW-13 (lesson-18). Docker-образы. Микросервисы.](#hw13)
 - [HW-14 (lesson-19). Docker: сети, docker-compose.](#hw14)
 - [HW-15 (lesson-23). Введение в мониторинг. Системы мониторинга.](#hw15)
+- [HW-16 (lesson-26). Логирование и распределенная трассировка.](#hw16)
 
 <!-- /MarkdownTOC -->
 ---
@@ -115,3 +116,31 @@ $ cd docker && make && make start
 Проверка работоспособности:
 
 перейти по ссылке `http://{{ external_vm_ip_address }}:9090`
+
+---
+## HW-16 (lesson-26). <a name="hw16"> </a>
+#### Логирование и распределенная трассировка.
+1. Создан compose-файл для системы логирования, Dockerfile и конфигурация для `Fluentd`.
+2. Собраны logging-enable образы приложения, настроена отправка логов `post` во `Fluentd`, запущена система логирования.
+3. Создан индекс в `Kibana`, опробован поиск по полям, добавлены фильтры во `Fluentd` для парсинга структурированных логов.
+4. Настроена отправка логов `ui` во `Fluentd`, добавлен фильтр в виде regexp.
+5. Регулярные выражения заменены на шаблоны `grok`, (* включая формат вида:
+```service=ui | event=request | path=/new | request_id=fc733abc-6157-4c2c-8530-c9c041a3ca70 | remote_addr=1.2.3.4 | method= POST | response_status=303 ```
+6. В систему логгирования добавлен `Zipkin`, ииследованы трейсы.
+7. Проведен траблшутинг UI-экспириенса (`bugged-code`):
+   1. страница с любым постом загружается более 3 секунд;
+   2. с помощью `Zipkin` найден источник проблемы: route `/post/<id>` -> функция `find_post(id)` -> инструкция `time.sleep(3)`;
+   3. проблема в коде устранена, после пересборки образа загрузка любой страницы занимает ~60-70 мс.
+
+Запуск проекта:
+```
+$ cd $REPO_ROOT/logging/fluentd && docker build -t $USER_NAME/fluentd .
+$ cd $REPO_ROOT/docker && docker-compose -f docker-compose-logging.yml -f docker-compose.yml up -d
+```
+
+Проверка работоспособности:
+
+перейти по ссылке
+1. `http://{{ external_vm_ip_address }}:9292` - приложение;
+2. `http://{{ external_vm_ip_address }}:5601` - Kibana;
+3. `http://{{ external_vm_ip_address }}:9411` - Zipkin.

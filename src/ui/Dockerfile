@@ -1,20 +1,13 @@
-FROM alpine:3.9
+FROM ruby:2.2-alpine
+
+RUN apk --no-cache --update add build-base=0.4-r1
 
 ENV APP_HOME /app
 RUN mkdir $APP_HOME
 
 WORKDIR $APP_HOME
 COPY Gemfile* $APP_HOME/
-RUN apk --no-cache --update add \
-        build-base \
-        ruby-dev \
-        ruby-full \
-    && gem install bundler:1.17.2 --no-document \
-    && bundle install \
-    && apk del \
-        build-base \
-        ruby-dev
-
+RUN bundle install
 COPY . $APP_HOME
 
 ENV POST_SERVICE_HOST post

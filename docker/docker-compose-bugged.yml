@@ -10,7 +10,7 @@ services:
           - comment_db
           - post_db
   ui:
-    image: ${USERNAME}/ui:${UI_VERSION}
+    image: ${USERNAME}/ui:bugged
     ports:
       - ${EXT_PORT}:9292/tcp
     networks:
@@ -22,9 +22,13 @@ services:
         tag: service.ui
     environment:
       - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
+      - POST_SERVICE_HOST=${POST_SERVICE_HOST:-post}
+      - POST_SERVICE_PORT=${POST_SERVICE_PORT:-5000}
+      - COMMENT_SERVICE_HOST=${COMMENT_SERVICE_HOST:-comment}
+      - COMMENT_SERVICE_PORT=${COMMENT_SERVICE_PORT:-9292}
 
   post:
-    image: ${USERNAME}/post:${POST_VERSION}
+    image: ${USERNAME}/post:bugged
     networks:
       - back_net
       - front_net
@@ -35,14 +39,18 @@ services:
         tag: service.post
     environment:
       - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
+      - POST_DATABASE_HOST=${POST_DATABASE_HOST:-post_db}
+      - POST_DATABASE=${POST_DATABASE:-posts}
 
   comment:
-    image: ${USERNAME}/comment:${COMMENT_VERSION}
+    image: ${USERNAME}/comment:bugged
     networks:
       - back_net
       - front_net
     environment:
       - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
+      - COMMENT_DATABASE_HOST=${COMMENT_DATABASE_HOST:-comment_db}
+      - COMMENT_DATABASE=${COMMENT_DATABASE:-comments}
 
 volumes:
   prometheus_data:
