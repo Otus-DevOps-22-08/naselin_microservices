@@ -1,0 +1,9 @@
+cloud_id                 = "FakeCloudID"
+folder_id                = "FakeFolderID"
+zone                     = "ru-central1-a"
+image_id                 = "FakeImageID"
+public_key_path          = "~/.ssh/ubuntu.pub"
+private_key_path         = "~/.ssh/ubuntu"
+subnet_id                = "FakeSubnetID"
+service_account_key_file = "~/key.json"
+nodes_count = 2
