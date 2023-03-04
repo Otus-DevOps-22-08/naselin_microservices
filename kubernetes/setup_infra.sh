@@ -3,11 +3,11 @@
 TERRAFORM="terraform -chdir=terraform"
 INVENTORY="./ansible/inventory"
 
-echo "Create VM's..."
+echo "Create VM..."
 $TERRAFORM apply -auto-approve
 
+echo "Get VM IP..."
 NODES=$($TERRAFORM output | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}")
-
 readarray -t IP_LIST <<<"$NODES"
 
 MASTER=${IP_LIST[0]}
@@ -21,11 +21,10 @@ do
    NOT_AVAIABLE=$?
 done
 
-echo "Master node will be $MASTER, worker node will be $WORKER."
+echo "Master node will be $MASTER, worker node will be $WORKER. Make inventory..."
 sed -i "s/master ansible_host=.*/master ansible_host=$MASTER/g" $INVENTORY
 sed -i "s/worker ansible_host=.*/worker ansible_host=$WORKER/g" $INVENTORY
 
-echo "Make inventory..."
 cat $INVENTORY
 
 echo "Apply playbook..."

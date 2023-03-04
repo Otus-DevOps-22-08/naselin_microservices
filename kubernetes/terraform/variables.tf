@@ -25,5 +25,5 @@ variable service_account_key_file {
 }
 variable nodes_count {
   description = "Noodes count"
-  default = 1
+  default = 2
 }

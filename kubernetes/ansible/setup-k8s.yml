@@ -100,9 +100,9 @@
 - hosts: master
   become: true
   name: Setup master node
-  tags: worker
+  tags: master
   tasks:
-    - name: What if Kubernetes cluster already initialized?
+    - name: What if the Kubernetes cluster already initialized?
       ansible.builtin.stat:
         path: /var/lib/etcd
       register: register_etcd
@@ -119,6 +119,7 @@
         owner: ubuntu
         group: ubuntu
         mode: 0755
+      when: not register_etcd.stat.exists
 
     - name: Setup kubeconfig for ubuntu user
       ansible.builtin.copy:
@@ -128,6 +129,7 @@
         owner: ubuntu
         group: ubuntu
         mode: 0600
+      when: not register_etcd.stat.exists
 
     - name: Install calico pod network
       become: false
@@ -139,10 +141,12 @@
         - kubectl apply -f custom-resources.yaml
       args:
         chdir: $HOME
+      when: not register_etcd.stat.exists
 
     - name: Generate join command
       ansible.builtin.command: kubeadm token create --print-join-command
       register: join_command
+      when: not register_etcd.stat.exists
 
     - name: Copy join command to local file
       become: false
@@ -151,6 +155,7 @@
         dest: ./join-command
         mode: 0600
       delegate_to: localhost
+      when: not register_etcd.stat.exists
 
 # Setup worker node
 - hosts: worker
@@ -167,3 +172,4 @@
 
     - name: Join the node to cluster
       ansible.builtin.command: sh /tmp/join-command.sh
+      when: register_join

@@ -1,7 +1,7 @@
 cloud_id                 = "FakeCloudID"
 folder_id                = "FakeFolderID"
 zone                     = "ru-central1-a"
-image_id                 = "FakeImageID"
+image_id                 = "fd89n8278rhueakslujo" # Ubuntu 22-04
 public_key_path          = "~/.ssh/ubuntu.pub"
 private_key_path         = "~/.ssh/ubuntu"
 subnet_id                = "FakeSubnetID"
