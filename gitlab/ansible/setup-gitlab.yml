@@ -1,0 +1,47 @@
+---
+- hosts: all
+  become: true
+  name: Setup Gitlab on the VM
+  tasks:
+  - name: Install pip
+    ansible.builtin.apt:
+      state: present
+      update_cache: true
+      pkg:
+        - python3-pip
+
+  - name: Upgrade pip
+    ansible.builtin.pip:
+      name: pip
+      umask: "0022"
+      extra_args: --upgrade
+
+  - name: Install Docker Python modules for all users
+    ansible.builtin.pip:
+      name: "{{ item }}"
+      umask: "0022"
+    with_items:
+      - setuptools-rust
+      - docker
+      - docker-compose
+
+  - name: Create directories
+    ansible.builtin.file:
+      path: "{{ item }}"
+      state: directory
+      mode: '0755'
+    with_items:
+      - /srv/gitlab/config
+      - /srv/gitlab/data
+      - /srv/gitlab/logs
+
+  - name: Create docker-compose.yml
+    ansible.builtin.template:
+      src: docker-compose.yml.j2
+      dest: /srv/gitlab/docker-compose.yml
+      mode: 0755
+
+  - name: Docker-compose up
+    community.docker.docker_compose:
+      project_src: /srv/gitlab/
+      state: present
