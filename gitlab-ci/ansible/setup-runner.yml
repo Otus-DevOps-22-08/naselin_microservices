@@ -3,10 +3,8 @@
   hosts: all
   become: true
   vars:
-    url: "http://{{ hostvars[inventory_hostname]['ansible_host'] }}/"
     runner_name: "DockerRunner"
     runner_image: "alpine:latest"
-    token: "{{ registration_token }}"
     tag_list: "linux,xenial,ubuntu,docker"
   tasks:
     - name: Create directories
@@ -30,20 +28,9 @@
     - name: Register gitlab runner
       community.docker.docker_container_exec:
         container: gitlab-runner
-        command: gitlab-runner register \
-                  --url {{ url }} \
-                  --non-interactive \
-                  --locked=false \
-                  --name={{ runner_name }} \
-                  --executor docker \
-                  --docker-image {{ runner_image }} \
-                  --registration-token {{ token }} \
-                  --tag-list={{ tag_list }} \
-                  --run-untagged
+        command: gitlab-runner register --url http://"{{ ansible_host }}/" --non-interactive --locked=false --name="{{ runner_name }}" --executor docker --docker-image "{{ runner_image }}" --registration-token "{{ registration_token }}" --tag-list "{{ tag_list }}" --run-untagged
       register: result
-      tags: [never, register]
 
     - name: Show result
       ansible.builtin.debug:
         var: result.stderr_lines
-      tags: [never, register]
