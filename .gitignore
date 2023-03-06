@@ -28,3 +28,6 @@ vault.key
 
 # Security
 .env
+
+# Kubernetes
+join-command

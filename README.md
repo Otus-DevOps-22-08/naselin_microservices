@@ -8,6 +8,7 @@ naselin microservices repository
 - [HW-14 (lesson-19). Docker: сети, docker-compose.](#hw14)
 - [HW-15 (lesson-23). Введение в мониторинг. Системы мониторинга.](#hw15)
 - [HW-16 (lesson-26). Логирование и распределенная трассировка.](#hw16)
+- [HW-17 (lesson-27). Введение в kubernetes.](#hw17)
 
 <!-- /MarkdownTOC -->
 ---
@@ -144,3 +145,35 @@ $ cd $REPO_ROOT/docker && docker-compose -f docker-compose-logging.yml -f docker
 1. `http://{{ external_vm_ip_address }}:9292` - приложение;
 2. `http://{{ external_vm_ip_address }}:5601` - Kibana;
 3. `http://{{ external_vm_ip_address }}:9411` - Zipkin.
+
+---
+## HW-17 (lesson-27). <a name="hw17"> </a>
+#### Введение в kubernetes.
+1. Созданы заготовки манифестов `post-deployment.yml`, `ui-deployment.yml`, `comment-deployment.yml`, `mongo-deployment.yml`.
+2. С помощью terraform развёрнуты 2 VM.
+3. С помощью ansible установлено необходимое ПО, развёрнут кластер k8s.
+4. После установки, ноды в состоянии `NotReady`. Для решения проблемы в playbook добавлена установка `calico`. Результат:
+```
+$ kubectl get nodes
+NAME        STATUS   ROLES           AGE   VERSION
+k8s-node0   Ready    control-plane   18m   v1.26.2
+k8s-node1   Ready    <none>          17m   v1.26.2
+```
+5. Применены созданные в п.1 манифесты (`kubectl apply -f <filename.yml>`):
+```
+$ kubectl get pods
+NAME                                  READY   STATUS    RESTARTS   AGE
+comment-deployment-7d7f4cd5d4-8bx5j   1/1     Running   0          11m
+mongo-deployment-5b955d497d-mfbf5     1/1     Running   0          12m
+post-deployment-756db975b8-cgrqm      1/1     Running   0          12m
+ui-deployment-5c4544b6bd-s4jgn        1/1     Running   0          11m
+```
+
+Запуск проекта (после настройки переменных `terraform`):
+```
+$ cd kubernetes && bash setup_infra.sh
+```
+
+Проверка работоспособности:
+
+выполнить команду `ssh -i ~/.ssh/appuser ubuntu@x.x.x.x kubectl get nodes` (x.x.x.x - IP-адрес мастер-ноды), убедиться что ноды в статусе `Ready`.
