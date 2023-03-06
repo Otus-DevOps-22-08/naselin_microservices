@@ -21,7 +21,7 @@ build_job:
   environment:
     name: branch/$CI_COMMIT_REF_NAME
     url: http://$CI_ENVIRONMENT_SLUG.example.com
-  image: naselin/otus-reddit
+  image: naselin/otus-reddit:1.0
   before_script:
   - echo 'Prepare to run reddit'
 
