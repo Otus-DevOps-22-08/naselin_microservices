@@ -18,9 +18,9 @@ build_job:
   stage: build
   script:
   - echo 'Building'
-    environment:
-      name: branch/$CI_COMMIT_REF_NAME
-      url: http://$CI_ENVIRONMENT_SLUG.example.com
+  environment:
+    name: branch/$CI_COMMIT_REF_NAME
+    url: http://$CI_ENVIRONMENT_SLUG.example.com
   image: naselin/otus-reddit
   before_script:
   - echo 'Prepare to run reddit'
