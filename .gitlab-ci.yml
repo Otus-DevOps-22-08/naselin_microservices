@@ -12,7 +12,7 @@ variables:
 
 before_script:
   - cd reddit
-  - bundle install
+  - bundle update && bundle install
 
 build_job:
   stage: build
