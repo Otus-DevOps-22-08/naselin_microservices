@@ -180,7 +180,7 @@ $ cd kubernetes && bash setup_infra.sh
 выполнить команду `ssh -i ~/.ssh/appuser ubuntu@x.x.x.x kubectl get nodes` (x.x.x.x - IP-адрес мастер-ноды), убедиться что ноды в статусе `Ready`.
 
 ---
-## HW-18 (lesson-28). <a name="hw17"> </a>
+## HW-18 (lesson-28). <a name="hw18"> </a>
 #### Устройство Gitlab CI. Построение процесса непрерывной поставки.
 1. С помощью terraform развёрнута VM.
 2. С помощью ansible установлено необходимое ПО, развёрнут Gitlab (omnibus-установка).
