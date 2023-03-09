@@ -7,7 +7,7 @@ metadata:
     app: reddit
     component: post
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: reddit
@@ -20,8 +20,5 @@ spec:
         component: post
     spec:
       containers:
-      - image: naselin/post:latest
+      - image: naselin/post
         name: post
-        env:
-        - name: POST_DATABASE_HOST
-          value: post-db

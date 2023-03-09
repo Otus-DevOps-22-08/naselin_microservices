@@ -1,11 +1,7 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ui
-  labels:
-    app: reddit
-    component: ui
+  name: ui-deployment
 spec:
   replicas: 3
   selector:
@@ -22,8 +18,3 @@ spec:
       containers:
       - image: naselin/ui
         name: ui
-        env:
-        - name: ENV
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
