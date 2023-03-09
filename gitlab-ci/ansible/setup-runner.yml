@@ -1,0 +1,36 @@
+---
+- name: Setup Gitlab CI runner
+  hosts: all
+  become: true
+  vars:
+    runner_name: "DockerRunner"
+    runner_image: "alpine:latest"
+    tag_list: "linux,xenial,ubuntu,docker"
+  tasks:
+    - name: Create directories
+      ansible.builtin.file:
+        name: /srv/gitlab-runnner/config
+        state: directory
+        mode: '0755'
+
+    - name: Run gitlab-runner
+      community.docker.docker_container:
+        name: gitlab-runner
+        hostname: gitlab-runner
+        image: gitlab/gitlab-runner:latest
+        state: started
+        restart_policy: always
+        container_default_behavior: no_defaults
+        volumes:
+          - "/srv/gitlab-runner/config:/etc/gitlab-runner"
+          - "/var/run/docker.sock:/var/run/docker.sock"
+
+    - name: Register gitlab runner
+      community.docker.docker_container_exec:
+        container: gitlab-runner
+        command: gitlab-runner register --url http://"{{ ansible_host }}/" --non-interactive --locked=false --name="{{ runner_name }}" --executor docker --docker-image "{{ runner_image }}" --registration-token "{{ registration_token }}" --tag-list "{{ tag_list }}" --run-untagged
+      register: result
+
+    - name: Show result
+      ansible.builtin.debug:
+        var: result.stderr_lines

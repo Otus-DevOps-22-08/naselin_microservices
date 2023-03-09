@@ -9,6 +9,7 @@ naselin microservices repository
 - [HW-15 (lesson-23). Введение в мониторинг. Системы мониторинга.](#hw15)
 - [HW-16 (lesson-26). Логирование и распределенная трассировка.](#hw16)
 - [HW-17 (lesson-27). Введение в kubernetes.](#hw17)
+- [HW-18 (lesson-28). Устройство Gitlab CI. Построение процесса непрерывной поставки.](#hw18)
 
 <!-- /MarkdownTOC -->
 ---
@@ -177,3 +178,32 @@ $ cd kubernetes && bash setup_infra.sh
 Проверка работоспособности:
 
 выполнить команду `ssh -i ~/.ssh/appuser ubuntu@x.x.x.x kubectl get nodes` (x.x.x.x - IP-адрес мастер-ноды), убедиться что ноды в статусе `Ready`.
+
+---
+## HW-18 (lesson-28). <a name="hw18"> </a>
+#### Устройство Gitlab CI. Построение процесса непрерывной поставки.
+1. С помощью terraform развёрнута VM.
+2. С помощью ansible установлено необходимое ПО, развёрнут Gitlab (omnibus-установка).
+3. Создана группа и проект, добавлен remote к своему репозиторию.
+4. В файле `.gitlab-ci.yml.` описано определение CI/CD Pipeline.
+5. В интерфейсе найден токен, добавлен и зарегистрирован раннер.
+6. В репозиторий добавлен исходный код reddit, добавлены тесты в пайплайне.
+7. Добавлены окружения dev, staging и production.
+8. Добавлены и проверены (пуш с тэгами) условия для задач.
+9. Добавлены динамические окружения, проверено их создание для новых веток.
+10. Суть задания про запуск reddit в контейнере не до конца осознал. Поэтому, использовал собранный в одном из предудыщих заданий образ с reddit-контейнером.
+11. Для автоматизации развёртывания gitlab-runner был выбран вариант с ansible-playbook.
+12. Настроены оповещения в канале Slack, канал доступен по <a href=https://devops-team-otus.slack.com/archives/C044H5AU3KJ>ссылке</a>.
+
+P.S. В ходе экспериментов свободная оперативная памть VM внезапно закончилась (и раннеры начали непредсказуемо падать в случайных местах).
+В связи с этим, увеличил цифру в terraform до 8GB.
+
+Запуск проекта:
+1. настроить переменные terraform, развернуть VM: `$ cd $REPO_ROOT/gitlab-ci/terraform && terraform apply`;
+2. настроить IP в ansible inventory, развернуть docker: `$ cd $REPO_ROOT/gitlab-ci/ansible && ansible-playbook setup-docker.yml -i inventory`
+3. развернуть gitlab: `$ cd $REPO_ROOT/gitlab-ci/ansible && ansible-playbook setup-gitlab.yml -i inventory`;
+4. залогиниться на VM: `$ ssh -i ~/.ssh/appuser ubuntu@x.x.x.x` (где `x.x.x.x` - внешний IP-адрес VM), дождаться запуска ПО;
+5. получить пароль root: `$ sudo docker exec -it gitlab_web_1 grep 'Password:' /etc/gitlab/initial_root_password`;
+6. перейти по ссылке: `http://x.x.x.x`, залогиниться, создать необходимые сущности (группа и проект);
+7. найти в интерфейсе токен (ниже - YourToken), развернуть и зарегистрировать раннер:
+`$ cd $REPO_ROOT/gitlab-ci/ansible && ansible-playbook setup-runner.yml -i inventory --extra-vars=registration_token=YourToken`.
