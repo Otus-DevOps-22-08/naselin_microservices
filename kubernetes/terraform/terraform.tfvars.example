@@ -7,3 +7,11 @@ private_key_path         = "~/.ssh/ubuntu"
 subnet_id                = "FakeSubnetID"
 service_account_key_file = "~/key.json"
 nodes_count = 2
+
+# K8s service setup
+k8s_subnet_id           = "FakeSubnetID"
+k8s_cluster_version     = "1.23"
+k8s_network_id          = "FakeK8sNetworkID"
+service_account_id      = "FakeK8sSAID"
+node_service_account_id = "FakeK8sSAID"
+nodes_in_group          = "2"
