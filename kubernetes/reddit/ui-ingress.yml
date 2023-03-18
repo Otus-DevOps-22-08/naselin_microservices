@@ -6,6 +6,8 @@ metadata:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 spec:
   ingressClassName: nginx
+  tls:
+  - secretName: ui-ingress
   rules:
   - http:
       paths:

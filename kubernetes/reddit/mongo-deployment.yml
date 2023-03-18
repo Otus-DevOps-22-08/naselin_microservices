@@ -29,6 +29,6 @@ spec:
         - name: mongo-persistent-storage
           mountPath: /data/db
       volumes:
-      - name: mongo-persistent-storage
+      - name: mongo-persistent-storage # name: mongo-gce-pd-storage - Only for Github actions!
         persistentVolumeClaim:
           claimName: mongo-pvc
