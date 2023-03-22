@@ -31,3 +31,5 @@ vault.key
 
 # Kubernetes
 join-command
+tls.crt
+tls.key

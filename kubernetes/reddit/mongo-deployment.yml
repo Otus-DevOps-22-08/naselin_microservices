@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -30,5 +29,6 @@ spec:
         - name: mongo-persistent-storage
           mountPath: /data/db
       volumes:
-      - name: mongo-persistent-storage
-        emptyDir: {}
+      - name: mongo-persistent-storage # name: mongo-gce-pd-storage - Only for Github actions!
+        persistentVolumeClaim:
+          claimName: mongo-pvc
